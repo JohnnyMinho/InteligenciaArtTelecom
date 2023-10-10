@@ -162,7 +162,7 @@ class Graph:
             
             nodo_atual = fila.get()
             if nodo_atual == end:
-                path_Found = True
+                path_found = True
             else:
                 for (adjacente,peso) in self.m_graph[nodo_atual]:
                     if adjacente not in visited:

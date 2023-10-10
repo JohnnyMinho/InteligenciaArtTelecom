@@ -6,6 +6,7 @@ from Grafo import Graph
 
 #DFS
 
+"""
 def DFS(Destiny,Start,Current_Path,current_cost,Total_Paths,Position,Visited):
     #Solução, escolher um dos caminhos e tentar chegar à "bruta" ao destino.
     cost = current_cost
@@ -23,7 +24,6 @@ def DFS(Destiny,Start,Current_Path,current_cost,Total_Paths,Position,Visited):
     if(Current_Path == None):
         Path = []
         Path.append(current_node)
-    options = graph.get(current_node)
     for option in options:
         if(option not in Path and Destiny not in Path):
             if(option not in Visited_Nodes):
@@ -41,9 +41,9 @@ def DFS(Destiny,Start,Current_Path,current_cost,Total_Paths,Position,Visited):
             Visited_Nodes.remove(Destiny)
             cost = 0
     return Total_Paths
-
+"""
 #BFS
-
+"""
 def BFS(Destiny,Start,Queue):
     current_queue = Queue
     if(Queue == None):
@@ -51,7 +51,7 @@ def BFS(Destiny,Start,Queue):
     options = graph.get()
 
     return 0
-
+"""
 def main():
     #Definição de grafo
     g = Graph()
@@ -71,12 +71,15 @@ def main():
     StartNode = sys.argv[3] #Indica o estado inicial
     if(ArgOption == "1"):
         #DFS
-        results = DFS(DestinyNode,StartNode,None,0,None,None,None) #Usar inicio, fim Path e Visited só
+        #results = DFS(DestinyNode,StartNode,None,0,None,None,None) #Usar inicio, fim Path e Visited só
+        results = Graph.procura_DFS(g,StartNode,DestinyNode)
         print("Caminhos Possiveís:")
         print(results)
     elif(ArgOption == "2"):
         #BFS
-        print(BFS(DestinyNode,StartNode))
+        #print(BFS(DestinyNode,StartNode))
+        results = Graph.procura_BFS(g,StartNode,DestinyNode)
+
     elif(ArgOption == "3"):
         #Imprimir Grafo
         print(g.m_graph)
