@@ -1,6 +1,7 @@
 class node:
     #   construtor do nodo...
-    def __init__(self, name):
+    def __init__(self, name,id =-1):
+        self.m_id = id
         self.m_name = str(name)
         #Posteriormente colocar o objeto que o nodo vai referenciar...
 
@@ -12,6 +13,12 @@ class node:
     def __repr__(self):
         return "node " + self.m_name
 
+    def setId(self, id):
+        self.m_id = id
+
+    def getId(self):
+        return self.m_id
+
     #obter o nome de um nodo
     def getName(self):
         return self.m_name
@@ -22,9 +29,9 @@ class node:
 
     #Metodo utilizado para comparar dois nodos,
     #neste caso dois nodos sao iguais se os nomes forem iguais
-    def __eq__(self, other):
+    """def __eq__(self, other):
         # sao iguais se nomes iguais, nao usa o id
-        return self.m_name == other.m_name
+        return self.m_name == other.m_name"""
 
     #Devolve o hash de um nodo. Ao implementar o metodo __eq__
     #torna-se tambem necessário definir __hash__. Caso

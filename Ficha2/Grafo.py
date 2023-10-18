@@ -4,6 +4,7 @@ import queue
 from Node import node
 import matplotlib.pyplot as plt
 import networkx as nx #biblioteca de tratamento de grafos para desenhar grafos
+import networkx
 
 
 #definição da class grafo:
@@ -18,6 +19,7 @@ class Graph:
         self.m_nodes = []
         self.m_directed = directed #se o grafo é direcionado ou nao
         self.m_graph = {}   #   dicionario para armazenar os nodos, arestas e pesos
+        self.m_heuristica = {} #Euristica
 
     ##############################
     # Escrever o grafo com string
@@ -34,11 +36,12 @@ class Graph:
 
     def get_node_by_name(self,name):
         search_node = node(name)
-        for node in self.m_nodes:
-            if node == search_node:
-                return node
+        for nodo in self.m_nodes:
+            if nodo == search_node:
+                return nodo
             else:
                 return None
+            
     #############################
     # Adicionar Aresta + Nodo
     ############################
@@ -48,23 +51,20 @@ class Graph:
         n1 = node(Node1)
         if(Node1 not in self.m_nodes):
             n1_id = len(self.m_nodes)
-            n1.setid(n1_id)
+            n1.setId(n1_id)
             self.m_nodes.append(Node1)
             self.m_graph[Node1] = []
         else:
             n1 = self.get_node_by_name(Node1)
         if(Node2 not in self.m_nodes):
             n2_id = len(self.m_nodes)
-            n2.setid(n2_id)
+            n2.setId(n2_id)
             self.m_nodes.append(Node2)
             self.m_graph[Node2] = []
         else:
             n2 = self.get_node_by_name(Node2)
-        self.m_graph[Node1].append((Node1 , custo))
+        self.m_graph[Node1].append((Node2 , custo))
         #self.m_graph[Node2].append((Node2 , custo))
-
-    def add_Node():
-        print("test")
 
     ############################
     # Imprime as arestas 
@@ -73,11 +73,15 @@ class Graph:
     def imprime_arestas(self):
         listaA = ""
         lista = self.m_graph.keys()
-        for node in lista:
-            for (nodo2,custo) in self.m_graph[node]:
-                listaA = listaA + node + '->' + nodo2 + " custo:"+str(custo) + "\n"
+        for nodo in lista:
+            for (nodo2,custo) in self.m_graph[nodo]:
+                listaA = listaA + nodo + '->' + nodo2 + " custo:"+str(custo) + "\n"
         return listaA
     
+    ##########################
+    #
+    ##########################
+
     def getNodes(self):
         return self.m_nodes
     
@@ -104,10 +108,10 @@ class Graph:
 
     #Devolve todos os nodes adjacente aos Node em questão
     def get_neighbours(self,Node1):
-        temp = []
+        temp = {}
         for (adjacente,custo) in self.m_nodes:
             if adjacente == Node1:
-                temp.append(adjacente)
+                temp[adjacente] = [custo, self.getH(self,Node1)]
         return temp
 
     def desenha(self):
@@ -116,9 +120,9 @@ class Graph:
         lista_a = []
         g = nx.Graph()
         for nodo in lista_v:
-            n = nodo.getName()
+            n = node(nodo)
             g.add_node(n)
-            for (adjacente, peso) in self.m_graph[n]:
+            for (adjacente, peso) in self.m_graph[nodo]:
                 lista = (n, adjacente)
                 # lista_a.append(lista)
                 g.add_edge(n, adjacente, weight=peso)
@@ -130,6 +134,10 @@ class Graph:
 
         plt.draw()
         plt.show()
+
+    ###########################
+    # Algoritmos de procura não informada
+    ###########################
 
     def procura_DFS(self,start,end,path=[],visited=set()):
         path.append(start)
@@ -180,3 +188,58 @@ class Graph:
             return path
             
         return None
+    
+    ###########################
+    # Algoritmos de procura informada
+    ###########################
+
+    def Procura_Gulosa(self, start, end,path=[]):
+        path = []
+        available_options = {}
+        custo_max = 0
+        final_decision = ""
+        for (adjacente,custo) in self.m_graph[start]:
+            print(adjacente)
+            if(adjacente == end):
+                path.append(adjacente)
+                return path
+            elif(adjacente not in path):
+                available_options[adjacente] = self.m_heuristica[adjacente]
+        for heuristica,option in available_options,available_options.keys():
+            if heuristica > custo_max:
+                final_decision = option
+        path.append(final_decision)
+        resultado = self.Procura_Gulosa(self,final_decision,end,path)
+        if(resultado is not None):
+            return resultado
+             
+        return None
+    
+    #############
+    #Heuristica
+    ###############
+    def add_heuristica(self,Node,estima):
+        n1 = node(Node)
+        if(Node in self.m_nodes):
+            #print("Hello")
+            self.m_heuristica[Node] = estima
+
+    #Devolve o valor da heuristica para um dado node
+    def getH(self,node):
+        for(Nodo,custo) in self.m_heuristica:
+            if(Nodo == node):
+                return custo
+
+    #Imprime a lista de heuristica
+    #Devolve o valor da heuristica para um dado node
+    def printH(self):
+        for(Nodo,custo) in self.m_heuristica:
+            print("Nodo:"+Nodo+" Heuristica:"+custo)
+
+    #
+    def heuristica(self):
+        nodes = self.m_graph.keys()
+        for nodo in nodes:
+            self.m_heuristica = 1 #define a heuristica para cada nodo como 1, aramazenando essa informação em um dicionário chamado self.heuristica
+
+        return True
