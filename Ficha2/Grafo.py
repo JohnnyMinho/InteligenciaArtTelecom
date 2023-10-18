@@ -64,7 +64,7 @@ class Graph:
         else:
             n2 = self.get_node_by_name(Node2)
         self.m_graph[Node1].append((Node2 , custo))
-        #self.m_graph[Node2].append((Node2 , custo))
+        self.m_graph[Node2].append((Node1 , custo))
 
     ############################
     # Imprime as arestas 
@@ -194,8 +194,11 @@ class Graph:
     ###########################
 
     def Procura_Gulosa(self, start, end,path=[]):
-        path = []
-        available_options = {}
+        #print(path)
+        #print("start:"+start)
+        if(start not in path):
+            path.append(start) #Para derrotar o edge case da iniciação da procura
+        available_options = []
         custo_max = 0
         final_decision = ""
         for (adjacente,custo) in self.m_graph[start]:
@@ -204,12 +207,15 @@ class Graph:
                 path.append(adjacente)
                 return path
             elif(adjacente not in path):
-                available_options[adjacente] = self.m_heuristica[adjacente]
-        for heuristica,option in available_options,available_options.keys():
-            if heuristica > custo_max:
+                available_options.append(adjacente)
+        temp = 0
+        for option in available_options:
+            if self.m_heuristica[available_options[temp]] > custo_max:
                 final_decision = option
+            temp+=1
         path.append(final_decision)
-        resultado = self.Procura_Gulosa(self,final_decision,end,path)
+        print("final: "+final_decision)
+        resultado = self.Procura_Gulosa(final_decision,end,path)
         if(resultado is not None):
             return resultado
              

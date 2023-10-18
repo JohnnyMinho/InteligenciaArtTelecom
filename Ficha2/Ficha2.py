@@ -27,6 +27,7 @@ def main():
     g.add_edge("vendasNovas", "montemor", 15)
     g.add_edge("montemor", "evora", 40)
     g.add_edge("evora", "estremoz", 40)
+    g.add_edge("borba", "estremoz", 145)
 
     #Heuristica
     g.add_heuristica("elvas",270)
