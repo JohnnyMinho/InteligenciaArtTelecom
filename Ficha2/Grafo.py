@@ -210,9 +210,13 @@ class Graph:
                 available_options.append(adjacente)
         temp = 0
         for option in available_options:
-            if self.m_heuristica[available_options[temp]] > custo_max:
+            if self.m_heuristica[available_options[temp]] < custo_max:
+                final_decision = option
+            elif custo_max == 0:
+                custo_max = self.m_heuristica[available_options[temp]]
                 final_decision = option
             temp+=1
+        print(final_decision)
         path.append(final_decision)
         #print("final: "+final_decision)
         resultado = self.Procura_Gulosa(final_decision,end,path)
