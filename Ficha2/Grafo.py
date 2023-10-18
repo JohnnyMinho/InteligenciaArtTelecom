@@ -120,17 +120,17 @@ class Graph:
         lista_a = []
         g = nx.Graph()
         for nodo in lista_v:
-            n = node(nodo)
-            g.add_node(n)
+            #n = node(nodo)
+            g.add_node(nodo)
             for (adjacente, peso) in self.m_graph[nodo]:
-                lista = (n, adjacente)
+                lista = (nodo, adjacente)
                 # lista_a.append(lista)
-                g.add_edge(n, adjacente, weight=peso)
+                g.add_edge(nodo, adjacente, weight=peso)
 
         pos = nx.spring_layout(g)
         nx.draw_networkx(g, pos, with_labels=True, font_weight='bold')
         labels = nx.get_edge_attributes(g, 'weight')
-        nx.draw_networkx_edge_labels(g, pos, edge_labels=labels)
+        #nx.draw_networkx_edge_labels(g, pos, edge_labels=labels)
 
         plt.draw()
         plt.show()
@@ -202,7 +202,7 @@ class Graph:
         custo_max = 0
         final_decision = ""
         for (adjacente,custo) in self.m_graph[start]:
-            print(adjacente)
+            #print(adjacente)
             if(adjacente == end):
                 path.append(adjacente)
                 return path
@@ -214,7 +214,7 @@ class Graph:
                 final_decision = option
             temp+=1
         path.append(final_decision)
-        print("final: "+final_decision)
+        #print("final: "+final_decision)
         resultado = self.Procura_Gulosa(final_decision,end,path)
         if(resultado is not None):
             return resultado
